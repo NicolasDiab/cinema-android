@@ -47,7 +47,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
         if (data_movies != null) {
             Movie movie = data_movies.get(position);
-            holder.text.setText(movie.getTitle() + " (" + Utils.getYearFromDate(movie.getReleaseDate()) + ")");
+
+            holder.text.setText(movie.getTitle() + " (" + Utils.getYearFromDate(movie.getReleaseDate()) + ") - "
+                    + movie.getDirector().getFirstname() + " " + movie.getDirector().getLastname());
             holder.itemView.setTag(movie.getCategory().getName());
         }
         if (data_actors != null) {

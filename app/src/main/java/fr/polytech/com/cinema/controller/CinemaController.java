@@ -149,12 +149,17 @@ public class CinemaController implements Callback<List<Movie>> {
         Category c = new Category();
         c.setName("cat1");
         m.setCategory(c);
+        Person p = new Person();
+        p.setFirstname("Steven");
+        p.setLastname("Spielberg");
+        m.setDirector(p);
         movieList.add(m);
 
         m = new Movie();
         m.setTitle("movie2");
         m.setReleaseDate(new Date());
         m.setCategory(c);
+        m.setDirector(p);
         movieList.add(m);
 
         mAdapter = new RecyclerViewAdapter(movieList, null);
