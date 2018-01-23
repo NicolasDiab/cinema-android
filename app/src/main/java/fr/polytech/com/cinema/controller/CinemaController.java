@@ -14,6 +14,7 @@ import java.util.List;
 import fr.polytech.com.cinema.entity.Actor;
 import fr.polytech.com.cinema.entity.Category;
 import fr.polytech.com.cinema.entity.Movie;
+import fr.polytech.com.cinema.entity.Person;
 import fr.polytech.com.cinema.service.CinemaApi;
 import fr.polytech.com.cinema.service.RecyclerViewAdapter;
 import retrofit2.Call;
@@ -62,24 +63,51 @@ public class CinemaController implements Callback<List<Movie>> {
         CinemaApi cinemaApi= retrofit.create(CinemaApi.class);
 
         Call<List<Actor>> call = cinemaApi.getActors();
-        try {
-            Response<List<Actor>> response = call.execute();
 
-            List<Actor> movieListInternal = response.body();
-            if (movieListInternal != null) {
+        call.enqueue(new Callback<List<Actor>>() {
+            @Override
+            public void onResponse(Call<List<Actor>> call, Response<List<Actor>> response) {
+                List<Actor> movieListInternal = response.body();
+                if (movieListInternal != null) {
+                    actorList = new ArrayList<>();
+
+                    for(Actor actor : movieListInternal) {
+                        System.out.println(actor.getPerson().getFirstname() + " " + actor.getPerson().getLastname());
+                        actorList.add(actor);
+                    }
+
+                    mAdapter = new RecyclerViewAdapter(null, actorList);
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Actor>> call, Throwable t) {
+                // do nothing
+
+                //test - to delete before release
                 actorList = new ArrayList<>();
 
-                for(Actor actor : movieListInternal) {
-                    System.out.println(actor.getPerson().getFirstname() + " " + actor.getPerson().getLastname());
-                    actorList.add(actor);
-                }
+                Actor a = new Actor();
+                Person p = new Person();
+                p.setFirstname("Gregoire");
+                p.setLastname("Piat");
+                a.setPerson(p);
+                a.setRole("Laveur de chiottes");
+                actorList.add(a);
+
+                a = new Actor();
+                p = new Person();
+                p.setFirstname("Alexandre");
+                p.setLastname("Gory");
+                a.setPerson(p);
+                a.setRole("Attireur de clientes");
+                actorList.add(a);
 
                 mAdapter = new RecyclerViewAdapter(null, actorList);
                 mRecyclerView.setAdapter(mAdapter);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     public void raz() {
