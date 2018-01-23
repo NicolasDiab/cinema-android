@@ -6,10 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import fr.polytech.com.cinema.entity.Actor;
 import fr.polytech.com.cinema.entity.Category;
 import fr.polytech.com.cinema.entity.Movie;
 import fr.polytech.com.cinema.service.CinemaApi;
@@ -20,13 +22,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MovieController implements Callback<List<Movie>> {
+public class CinemaController implements Callback<List<Movie>> {
     private final String API_BASE_URL = "https://PUT_URL_HERE/";
     private List<Movie> movieList;
+    private List<Actor> actorList;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
 
-    public void start(RecyclerView mRecyclerView) {
+    public void getMovies(RecyclerView mRecyclerView) {
         this.mRecyclerView = mRecyclerView;
 
         Gson gson = new GsonBuilder()
@@ -44,6 +47,46 @@ public class MovieController implements Callback<List<Movie>> {
         call.enqueue(this);
     }
 
+    public void getActors(RecyclerView mRecyclerView) {
+        this.mRecyclerView = mRecyclerView;
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        CinemaApi cinemaApi= retrofit.create(CinemaApi.class);
+
+        Call<List<Actor>> call = cinemaApi.getActors();
+        try {
+            Response<List<Actor>> response = call.execute();
+
+            List<Actor> movieListInternal = response.body();
+            if (movieListInternal != null) {
+                actorList = new ArrayList<>();
+
+                for(Actor actor : movieListInternal) {
+                    System.out.println(actor.getPerson().getFirstname() + " " + actor.getPerson().getLastname());
+                    actorList.add(actor);
+                }
+
+                mAdapter = new RecyclerViewAdapter(null, actorList);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void raz() {
+        movieList = null;
+        actorList = null;
+    }
+
     @Override
     public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
         if(response.isSuccessful()) {
@@ -56,7 +99,7 @@ public class MovieController implements Callback<List<Movie>> {
                     movieList.add(movie);
                 }
 
-                mAdapter = new RecyclerViewAdapter(movieList);
+                mAdapter = new RecyclerViewAdapter(movieList, null);
                 mRecyclerView.setAdapter(mAdapter);
             }
         } else {
@@ -86,11 +129,7 @@ public class MovieController implements Callback<List<Movie>> {
         m.setCategory(c);
         movieList.add(m);
 
-        mAdapter = new RecyclerViewAdapter(movieList);
+        mAdapter = new RecyclerViewAdapter(movieList, null);
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    public List<Movie> getMovieList() {
-        return movieList;
     }
 }

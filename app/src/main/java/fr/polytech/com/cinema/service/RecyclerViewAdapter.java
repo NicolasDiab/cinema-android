@@ -9,15 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
+import fr.polytech.com.cinema.entity.Actor;
 import fr.polytech.com.cinema.entity.Movie;
 import fr.polytech.com.cinema.utils.Utils;
 
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private List<Movie> data_movies = new ArrayList<>();
+    private List<Actor> data_actors = new ArrayList<>();
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView text;
@@ -30,8 +31,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    public RecyclerViewAdapter(List<Movie> data) {
-        this.data_movies = data;
+    public RecyclerViewAdapter(List<Movie> data_m, List<Actor> data_a) {
+        this.data_movies = data_m;
+        this.data_actors = data_a;
     }
 
     @Override
@@ -48,12 +50,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.text.setText(movie.getTitle() + " (" + Utils.getYearFromDate(movie.getReleaseDate()) + ")");
             holder.itemView.setTag(movie.getCategory().getName());
         }
+        if (data_actors != null) {
+            Actor actor = data_actors.get(position);
+            holder.text.setText(actor.getPerson().getLastname() + " " + actor.getPerson().getFirstname());
+            holder.itemView.setTag(actor.getRole());
+        }
     }
 
     @Override
     public int getItemCount() {
         if (data_movies != null)
             return data_movies.size();
+        if (data_actors != null)
+            return data_actors.size();
         return 0;
     }
 }
