@@ -3,4 +3,5 @@
     <string name="title_films_basic">Films</string>
     <string name="title_actors_basic">Acteurs</string>
     <string name="title_notifications">Notifications</string>
+    <string name="toolbar_menu_title">Projet Cinéma</string>
 </resources>
