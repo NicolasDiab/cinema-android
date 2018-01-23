@@ -19,7 +19,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MovieController implements Callback<List<Movie>> {
-    private final String API_BASE_URL = "https://PUT URL HERE/";
+    private final String API_BASE_URL = "https://PUT_URL_HERE/";
     private List<Movie> movieList;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
