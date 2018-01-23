@@ -9,9 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import fr.polytech.com.cinema.entity.Movie;
+import fr.polytech.com.cinema.utils.Utils;
 
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
@@ -43,7 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
         if (data_movies != null) {
             Movie movie = data_movies.get(position);
-            holder.text.setText(movie.getTitle() + " (" + movie.getReleaseDate().getYear() + ")");
+            holder.text.setText(movie.getTitle() + " (" + Utils.getYearFromDate(movie.getReleaseDate()) + ")");
             holder.itemView.setTag(movie.getCategory().getName());
         }
     }
