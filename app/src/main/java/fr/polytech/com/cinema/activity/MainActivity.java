@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
-                    controller.raz();
+                    controller.clearLists();
                     return true;
             }
             return false;
@@ -61,19 +61,18 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
         controller = new CinemaController();
 
         fillMovies();
     }
 
     private void fillMovies() {
-        controller.raz();
+        controller.clearLists();
         controller.getMovies(mRecyclerView);
     }
 
     private void fillActors() {
-        controller.raz();
+        controller.clearLists();
         controller.getActors(mRecyclerView);
     }
 }
