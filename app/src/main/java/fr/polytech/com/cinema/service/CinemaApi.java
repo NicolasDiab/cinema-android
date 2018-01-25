@@ -15,7 +15,7 @@ import retrofit2.http.Query;
 
 public interface CinemaApi {
 
-    @GET("peoples/")
+    @GET("people/")
     Call<List<Actor>> getActors();
 
     @GET("people/{id}")
