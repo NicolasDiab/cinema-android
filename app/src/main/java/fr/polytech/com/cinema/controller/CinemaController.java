@@ -24,7 +24,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CinemaController implements Callback<List<Movie>> {
-    private final String API_BASE_URL = "https://PUT_URL_HERE/";
+    private final String API_BASE_URL = "http://cinema.polytech-info.fr:8080/cinema-1.0/";
     private List<Movie> movieList;
     private List<Actor> actorList;
     private RecyclerView mRecyclerView;
@@ -110,7 +110,7 @@ public class CinemaController implements Callback<List<Movie>> {
         });
     }
 
-    public void raz() {
+    public void clearLists() {
         movieList = null;
         actorList = null;
     }
